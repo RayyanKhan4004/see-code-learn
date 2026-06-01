@@ -1,4 +1,4 @@
-import type { ExampleProgram, JsStep, VisualizerModule } from "./types";
+import type { ExampleProgram, JsStep, VisualizerModule } from "../types";
 
 // Helper builders to keep example traces concise.
 const push = (name: string, line: number, explanation: string, why: string, concept = "Call Stack"): JsStep => ({
