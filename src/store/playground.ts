@@ -6,15 +6,19 @@ import {
   type JsVmState,
 } from "@/lib/visualizer/types";
 import { javascriptModule } from "@/lib/visualizer/javascript/examples";
+import { traceCode } from "@/lib/visualizer/javascript/tracer";
 
 interface PlaygroundState {
   code: string;
   trace: JsStep[];
-  stepIndex: number; // -1 means before first step
+  stepIndex: number;
   vm: JsVmState;
   isPlaying: boolean;
   speedMs: number;
   exampleId: string;
+  isTracing: boolean;
+  traceError: string | null;
+  isLiveTrace: boolean;
 
   setCode: (code: string) => void;
   loadExample: (id: string) => void;
@@ -24,6 +28,7 @@ interface PlaygroundState {
   play: () => void;
   pause: () => void;
   setSpeed: (ms: number) => void;
+  runCode: () => Promise<void>;
 }
 
 function computeStateAt(trace: JsStep[], index: number): JsVmState {
