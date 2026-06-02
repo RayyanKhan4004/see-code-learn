@@ -101,8 +101,10 @@ export function PlaybackControls() {
         />
       </div>
 
-      <div className="font-mono text-xs text-muted-foreground tabular-nums">
-        Step {Math.max(0, stepIndex + 1)} / {trace.length}
+      <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground tabular-nums">
+        {isLiveTrace && <span className="rounded bg-[color:var(--primary)]/15 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-[color:var(--primary)]">live</span>}
+        {traceError && <span className="text-destructive">{traceError}</span>}
+        <span>Step {Math.max(0, stepIndex + 1)} / {trace.length}</span>
       </div>
     </div>
   );
