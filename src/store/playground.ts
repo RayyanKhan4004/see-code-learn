@@ -6,15 +6,19 @@ import {
   type JsVmState,
 } from "@/lib/visualizer/types";
 import { javascriptModule } from "@/lib/visualizer/javascript/examples";
+import { traceCode } from "@/lib/visualizer/javascript/tracer";
 
 interface PlaygroundState {
   code: string;
   trace: JsStep[];
-  stepIndex: number; // -1 means before first step
+  stepIndex: number;
   vm: JsVmState;
   isPlaying: boolean;
   speedMs: number;
   exampleId: string;
+  isTracing: boolean;
+  traceError: string | null;
+  isLiveTrace: boolean;
 
   setCode: (code: string) => void;
   loadExample: (id: string) => void;
@@ -24,6 +28,7 @@ interface PlaygroundState {
   play: () => void;
   pause: () => void;
   setSpeed: (ms: number) => void;
+  runCode: () => Promise<void>;
 }
 
 function computeStateAt(trace: JsStep[], index: number): JsVmState {
@@ -44,6 +49,9 @@ export const usePlayground = create<PlaygroundState>((set, get) => ({
   isPlaying: false,
   speedMs: 700,
   exampleId: firstExample.id,
+  isTracing: false,
+  traceError: null,
+  isLiveTrace: false,
 
   setCode: (code) => set({ code }),
 
@@ -57,6 +65,8 @@ export const usePlayground = create<PlaygroundState>((set, get) => ({
       vm: initialJsState,
       isPlaying: false,
       exampleId: id,
+      isLiveTrace: false,
+      traceError: null,
     });
   },
 
@@ -83,4 +93,22 @@ export const usePlayground = create<PlaygroundState>((set, get) => ({
   play: () => set({ isPlaying: true }),
   pause: () => set({ isPlaying: false }),
   setSpeed: (ms) => set({ speedMs: ms }),
+
+  runCode: async () => {
+    const { code } = get();
+    set({ isTracing: true, traceError: null, isPlaying: false });
+    try {
+      const trace = await traceCode(code);
+      set({
+        trace,
+        stepIndex: -1,
+        vm: initialJsState,
+        isTracing: false,
+        isLiveTrace: true,
+        isPlaying: true,
+      });
+    } catch (e) {
+      set({ isTracing: false, traceError: (e as Error).message });
+    }
+  },
 }));
