@@ -49,6 +49,9 @@ export const usePlayground = create<PlaygroundState>((set, get) => ({
   isPlaying: false,
   speedMs: 700,
   exampleId: firstExample.id,
+  isTracing: false,
+  traceError: null,
+  isLiveTrace: false,
 
   setCode: (code) => set({ code }),
 
@@ -62,6 +65,8 @@ export const usePlayground = create<PlaygroundState>((set, get) => ({
       vm: initialJsState,
       isPlaying: false,
       exampleId: id,
+      isLiveTrace: false,
+      traceError: null,
     });
   },
 
