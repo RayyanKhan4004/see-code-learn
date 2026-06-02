@@ -51,20 +51,37 @@ export function PlaybackControls() {
         </SelectContent>
       </Select>
 
+      <Button
+        size="sm"
+        onClick={runCode}
+        disabled={isTracing}
+        className="gap-1.5 bg-[color:var(--primary)] text-primary-foreground hover:bg-[color:var(--primary)]/90"
+        title="Execute the current code and generate a fresh trace"
+      >
+        {isTracing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
+        Run Code
+      </Button>
+
       <div className="flex items-center gap-1">
-        <Button size="icon" variant="ghost" onClick={reset} title="Reset">
+        <Button size="icon" variant="ghost" onClick={reset} title="Reset playback">
           <RotateCcw className="h-4 w-4" />
         </Button>
         <Button size="icon" variant="ghost" onClick={stepBackward} disabled={stepIndex < 0} title="Step back">
           <SkipBack className="h-4 w-4" />
         </Button>
         {isPlaying ? (
-          <Button size="sm" onClick={pause} className="gap-1.5">
+          <Button size="sm" variant="secondary" onClick={pause} className="gap-1.5">
             <Pause className="h-4 w-4" /> Pause
           </Button>
         ) : (
-          <Button size="sm" onClick={() => { if (stepIndex >= trace.length - 1) reset(); play(); }} className="gap-1.5">
-            <Play className="h-4 w-4" /> Run
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => { if (stepIndex >= trace.length - 1) reset(); play(); }}
+            className="gap-1.5"
+            disabled={trace.length === 0}
+          >
+            <Play className="h-4 w-4" /> Play
           </Button>
         )}
         <Button size="icon" variant="ghost" onClick={stepForward} disabled={stepIndex >= trace.length - 1} title="Step forward">
