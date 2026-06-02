@@ -20,6 +20,10 @@ export function PlaybackControls() {
     trace,
     exampleId,
     loadExample,
+    runCode,
+    isTracing,
+    isLiveTrace,
+    traceError,
   } = usePlayground();
 
   useEffect(() => {
