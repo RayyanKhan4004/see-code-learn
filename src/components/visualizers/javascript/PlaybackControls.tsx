@@ -3,7 +3,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { usePlayground } from "@/store/playground";
 import { javascriptModule } from "@/lib/visualizer/javascript/examples";
-import { Pause, Play, RotateCcw, SkipBack, SkipForward } from "lucide-react";
+import { Pause, Play, RotateCcw, SkipBack, SkipForward, Zap, Loader2 } from "lucide-react";
 import { useEffect } from "react";
 
 export function PlaybackControls() {
