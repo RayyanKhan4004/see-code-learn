@@ -93,4 +93,22 @@ export const usePlayground = create<PlaygroundState>((set, get) => ({
   play: () => set({ isPlaying: true }),
   pause: () => set({ isPlaying: false }),
   setSpeed: (ms) => set({ speedMs: ms }),
+
+  runCode: async () => {
+    const { code } = get();
+    set({ isTracing: true, traceError: null, isPlaying: false });
+    try {
+      const trace = await traceCode(code);
+      set({
+        trace,
+        stepIndex: -1,
+        vm: initialJsState,
+        isTracing: false,
+        isLiveTrace: true,
+        isPlaying: true,
+      });
+    } catch (e) {
+      set({ isTracing: false, traceError: (e as Error).message });
+    }
+  },
 }));
