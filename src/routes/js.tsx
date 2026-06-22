@@ -34,6 +34,9 @@ function JsPlayground() {
             <CodeEditor />
           </div>
           <LearningPanel />
+          <div className="h-48 min-h-0">
+            <LogsPanel />
+          </div>
         </div>
 
         {/* Right column: runtime visualization */}
