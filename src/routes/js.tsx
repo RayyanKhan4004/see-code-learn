@@ -10,6 +10,7 @@ import {
   MicrotaskQueuePanel,
   WebApisPanel,
 } from "@/components/visualizers/javascript/Panels";
+import { LogsPanel } from "@/components/visualizers/javascript/LogsPanel";
 
 export const Route = createFileRoute("/js")({
   head: () => ({
