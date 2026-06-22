@@ -10,6 +10,7 @@ import {
   MicrotaskQueuePanel,
   WebApisPanel,
 } from "@/components/visualizers/javascript/Panels";
+import { LogsPanel } from "@/components/visualizers/javascript/LogsPanel";
 
 export const Route = createFileRoute("/js")({
   head: () => ({
@@ -33,6 +34,9 @@ function JsPlayground() {
             <CodeEditor />
           </div>
           <LearningPanel />
+          <div className="h-48 min-h-0">
+            <LogsPanel />
+          </div>
         </div>
 
         {/* Right column: runtime visualization */}
