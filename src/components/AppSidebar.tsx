@@ -14,10 +14,10 @@ import { Badge } from "@/components/ui/badge";
 
 const activeModules = [
   { title: "JavaScript", url: "/js", icon: Code2 },
+  { title: "React", url: "/react", icon: Layers },
 ];
 
 const upcomingModules = [
-  { title: "React", url: "/react", icon: Layers },
   { title: "Next.js", url: "/nextjs", icon: Boxes },
   { title: "DBMS", url: "/dbms", icon: Database },
   { title: "Network", url: "/network", icon: Globe },
