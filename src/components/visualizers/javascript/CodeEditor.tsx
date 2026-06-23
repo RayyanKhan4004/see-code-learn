@@ -1,6 +1,8 @@
-import Editor, { type OnMount } from "@monaco-editor/react";
-import { useEffect, useRef } from "react";
+import { type OnMount } from "@monaco-editor/react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { usePlayground } from "@/store/playground";
+
+const Editor = lazy(() => import("@monaco-editor/react").then((m) => ({ default: m.default })));
 
 export function CodeEditor() {
   const code = usePlayground((s) => s.code);
