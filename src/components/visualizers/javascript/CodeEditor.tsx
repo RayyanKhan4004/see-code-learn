@@ -52,28 +52,39 @@ export function CodeEditor() {
 
   return (
     <div className="h-full overflow-hidden rounded-lg border border-border bg-[#1a1f2e]">
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  return (
+    <div className="h-full overflow-hidden rounded-lg border border-border bg-[#1a1f2e]">
       <style>{`
         .cv-active-line { background: rgba(56, 189, 248, 0.18) !important; }
         .cv-active-glyph { background: rgb(56, 189, 248); width: 3px !important; margin-left: 4px; }
       `}</style>
-      <Editor
-        height="100%"
-        defaultLanguage="javascript"
-        value={code}
-        onChange={(v) => setCode(v ?? "")}
-        onMount={onMount}
-        options={{
-          fontSize: 13,
-          fontFamily: "JetBrains Mono, ui-monospace, monospace",
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
-          padding: { top: 12 },
-          smoothScrolling: true,
-          renderLineHighlight: "none",
-          glyphMargin: true,
-          lineNumbersMinChars: 3,
-        }}
-      />
+      {mounted ? (
+        <Suspense fallback={<div className="p-4 text-xs text-muted-foreground">Loading editor…</div>}>
+          <Editor
+            height="100%"
+            defaultLanguage="javascript"
+            value={code}
+            onChange={(v) => setCode(v ?? "")}
+            onMount={onMount}
+            options={{
+              fontSize: 13,
+              fontFamily: "JetBrains Mono, ui-monospace, monospace",
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              padding: { top: 12 },
+              smoothScrolling: true,
+              renderLineHighlight: "none",
+              glyphMargin: true,
+              lineNumbersMinChars: 3,
+            }}
+          />
+        </Suspense>
+      ) : (
+        <div className="p-4 text-xs text-muted-foreground">Loading editor…</div>
+      )}
     </div>
   );
 }
