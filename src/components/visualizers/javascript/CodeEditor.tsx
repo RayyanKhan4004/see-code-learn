@@ -50,8 +50,6 @@ export function CodeEditor() {
     editor.revealLineInCenterIfOutsideViewport(currentLine);
   }, [currentLine]);
 
-  return (
-    <div className="h-full overflow-hidden rounded-lg border border-border bg-[#1a1f2e]">
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
