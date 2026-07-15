@@ -193,16 +193,20 @@ function PanelHeader({
   icon?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between border-b border-border bg-muted/30 px-3 py-2">
+    <div className="flex flex-col gap-0.5 border-b border-border bg-muted/30 px-3 py-2">
       <div className="flex items-center gap-2">
         <span
-          className="inline-block h-2 w-2 rounded-full"
+          className="inline-block h-2 w-2 rounded-full shrink-0"
           style={{ backgroundColor: `var(--${tone})` }}
         />
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground">{title}</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground truncate">{title}</h3>
         {icon}
       </div>
-      {hint && <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{hint}</span>}
+      {hint && (
+        <span className="pl-4 text-[9px] uppercase tracking-wider text-muted-foreground truncate">
+          {hint}
+        </span>
+      )}
     </div>
   );
 }
