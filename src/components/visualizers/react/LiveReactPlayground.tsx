@@ -334,7 +334,6 @@ function fmt(v: unknown): string {
 
 /* ---- tiny error boundary so user code doesn't nuke the panel ---- */
 
-import { Component, type ReactNode } from "react";
 
 class ErrorBoundary extends Component<
   { children: ReactNode; onError: (msg: string) => void },
