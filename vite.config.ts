@@ -6,10 +6,15 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+const isVercel = !!process.env.VERCEL;
+
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // On Vercel, force Nitro to build with the Vercel preset (Build Output API).
+  // Locally / in the Lovable sandbox this is ignored — Lovable pins Cloudflare.
+  ...(isVercel ? { nitro: { preset: "vercel" } } : {}),
 });
