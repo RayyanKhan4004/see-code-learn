@@ -3,14 +3,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Play, RotateCcw, Trash2, Sparkles, AlertCircle } from "lucide-react";
 import {
+  Component,
   Profiler,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
   type ComponentType,
   type ProfilerOnRenderCallback,
+  type ReactNode,
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { compileUserCode } from "@/lib/visualizer/react/live-runtime";
