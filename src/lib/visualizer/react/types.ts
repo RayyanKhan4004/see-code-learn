@@ -15,12 +15,7 @@ export type ReactStepKind =
   | "note";
 
 export type RenderReason =
-  | "initial"
-  | "parent-render"
-  | "state-changed"
-  | "props-changed"
-  | "context-changed"
-  | "force";
+  "initial" | "parent-render" | "state-changed" | "props-changed" | "context-changed" | "force";
 
 export interface ComponentNode {
   id: string;
@@ -49,7 +44,7 @@ export interface ReactStep {
   explanation: string;
   why: string;
   concept: string;
-  payload?: any;
+  payload?: Record<string, unknown>;
 }
 
 export interface ReactVmState {
@@ -78,7 +73,11 @@ function upsertNode(nodes: ComponentNode[], node: ComponentNode): ComponentNode[
   return next;
 }
 
-function patchNode(nodes: ComponentNode[], id: string, patch: Partial<ComponentNode>): ComponentNode[] {
+function patchNode(
+  nodes: ComponentNode[],
+  id: string,
+  patch: Partial<ComponentNode>,
+): ComponentNode[] {
   return nodes.map((n) => (n.id === id ? { ...n, ...patch } : n));
 }
 

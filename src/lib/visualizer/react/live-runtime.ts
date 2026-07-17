@@ -29,22 +29,21 @@ export function compileUserCode(source: string, hooks: RuntimeHooks): CompileRes
   // Track which component is currently rendering so useState logs can attribute.
   const currentComponentRef = { name: "<unknown>", hookIdx: 0 };
 
-  const wrappedUseState = <T,>(initial: T | (() => T)) => {
+  const WrappedUseState = <T>(initial: T | (() => T)) => {
     const idx = currentComponentRef.hookIdx++;
     const componentName = currentComponentRef.name;
     const [value, setValue] = React.useState<T>(initial);
     const setter = React.useCallback(
       (next: T | ((prev: T) => T)) => {
         setValue((prev) => {
-          const resolved =
-            typeof next === "function" ? (next as (p: T) => T)(prev) : next;
+          const resolved = typeof next === "function" ? (next as (p: T) => T)(prev) : next;
           if (!Object.is(prev, resolved)) {
             hooks.onStateChange(componentName, idx, prev, resolved);
           }
           return resolved;
         });
       },
-      [],
+      [componentName, idx],
     );
     return [value, setter] as const;
   };
@@ -59,7 +58,7 @@ export function compileUserCode(source: string, hooks: RuntimeHooks): CompileRes
   // Expose hooks & helpers by name in scope so user code doesn't need imports.
   const scope: Record<string, unknown> = {
     React,
-    useState: wrappedUseState,
+    useState: WrappedUseState,
     useEffect: React.useEffect,
     useMemo: React.useMemo,
     useCallback: React.useCallback,
@@ -94,17 +93,13 @@ export function compileUserCode(source: string, hooks: RuntimeHooks): CompileRes
     return __components;
   `;
 
-  const factory = new Function(
-    ...Object.keys(scope),
-    `${transformed}\n${wrapperTail}`,
-  );
+  const factory = new Function(...Object.keys(scope), `${transformed}\n${wrapperTail}`);
 
   const exported = factory(...Object.values(scope)) as Record<string, ComponentType | undefined>;
 
-  const RootName =
-    exported.App
-      ? "App"
-      : componentNames.find((n) => typeof exported[n] === "function") ?? "App";
+  const RootName = exported.App
+    ? "App"
+    : (componentNames.find((n) => typeof exported[n] === "function") ?? "App");
 
   const Root = exported[RootName];
   if (!Root) {

@@ -1,35 +1,46 @@
 import type { ReactExample, ReactStep } from "./types";
 
 // Helper builders to keep examples readable.
-const mount = (id: string, name: string, parentId: string | null, props: any = {}, state: any = {}, memo = false): ReactStep => ({
+const mount = (
+  id: string,
+  name: string,
+  parentId: string | null,
+  props: Record<string, unknown> = {},
+  state: Record<string, unknown> = {},
+  memo = false,
+): ReactStep => ({
   kind: "mount",
   explanation: `<${name}/> mounts under ${parentId ?? "root"}.`,
   why: "React creates the fiber, initializes hooks, and runs the component for the first time.",
   concept: "Mounting",
   payload: { id, name, parentId, props, state, memo },
 });
-const render = (id: string, reason: any, durationMs = 2): ReactStep => ({
+const render = (id: string, reason: string, durationMs = 2): ReactStep => ({
   kind: "render",
   explanation: `Re-render of #${id} (${reason}).`,
   why: "React calls the component function again to compute its next virtual DOM.",
   concept: "Render phase",
   payload: { id, reason, durationMs },
 });
-const skip = (id: string, reason: any = "props-changed"): ReactStep => ({
+const skip = (id: string, reason = "props-changed"): ReactStep => ({
   kind: "skip-render",
   explanation: `#${id} skipped — memo says props are equal.`,
   why: "React.memo / useMemo / useCallback stop unnecessary work when inputs haven't changed.",
   concept: "Bailout",
   payload: { id, reason },
 });
-const setState = (id: string, state: any, explanation: string): ReactStep => ({
+const setState = (id: string, state: Record<string, unknown>, explanation: string): ReactStep => ({
   kind: "set-state",
   explanation,
   why: "A setState call schedules a re-render of this component and its descendants.",
   concept: "State updates",
   payload: { id, state },
 });
-const updateProps = (id: string, props: any, explanation: string): ReactStep => ({
+const updateProps = (
+  id: string,
+  props: Record<string, unknown>,
+  explanation: string,
+): ReactStep => ({
   kind: "update-props",
   explanation,
   why: "Parent passed new props; React reconciles and may re-render the child.",
@@ -100,7 +111,10 @@ const rerenderExample: ReactExample = {
     note("User clicks the button.", "Event"),
     setState("parent", { count: 1 }, "setCount(1) — Parent will re-render."),
     render("parent", "state-changed", 3),
-    note("React keeps walking — children re-render too, even when props are equal by value.", "Default behavior"),
+    note(
+      "React keeps walking — children re-render too, even when props are equal by value.",
+      "Default behavior",
+    ),
     updateProps("child", { label: "static" }, "Child receives the SAME props as before."),
     render("child", "parent-render", 1),
     updateProps("sibling", { value: 1 }, "Sibling receives a new value prop."),
@@ -112,7 +126,8 @@ const memoExample: ReactExample = {
   id: "react-memo",
   title: "React.memo bailout",
   concept: "React.memo",
-  description: "Wrapping Child in React.memo lets React skip its render when props are shallow-equal.",
+  description:
+    "Wrapping Child in React.memo lets React skip its render when props are shallow-equal.",
   code: `const Child = React.memo(function Child({ label }) {
   return <span>{label}</span>;
 });
@@ -167,7 +182,10 @@ function Parent() {
     updateProps("child", { onClick: "fn#2" }, "Child receives a NEW function reference."),
     note("Shallow compare sees a different prop — memo can't bail out.", "Memo miss"),
     render("child", "props-changed", 1),
-    note("Wrap onClick in useCallback(() => …, []) so its identity is stable and Child skips.", "Fix"),
+    note(
+      "Wrap onClick in useCallback(() => …, []) so its identity is stable and Child skips.",
+      "Fix",
+    ),
   ],
 };
 

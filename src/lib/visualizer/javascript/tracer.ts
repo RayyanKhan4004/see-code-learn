@@ -8,6 +8,7 @@ import { generate } from "astring";
 import type { JsStep, ConsoleEntry, HeapObject, QueueItem, StackFrame, WebApiTask } from "../types";
 
 // Acorn AST nodes are loosely typed; we keep the surface narrow on purpose.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Acorn AST is intentionally untyped
 type AnyNode = any;
 
 let uid = 0;
@@ -26,7 +27,8 @@ function fmt(v: unknown): string {
   if (v === null) return "null";
   if (v === undefined) return "undefined";
   if (typeof v === "string") return v;
-  if (typeof v === "function") return `ƒ ${(v as Function).name || "anonymous"}`;
+  if (typeof v === "function")
+    return `ƒ ${(v as (...args: unknown[]) => unknown).name || "anonymous"}`;
   if (typeof v === "object") {
     try {
       return JSON.stringify(v);
@@ -38,7 +40,11 @@ function fmt(v: unknown): string {
 }
 
 /** Walk every nested node; mutate in place when the transformer returns one. */
-function walk(node: AnyNode, parent: AnyNode | null, visit: (n: AnyNode, p: AnyNode | null) => void) {
+function walk(
+  node: AnyNode,
+  parent: AnyNode | null,
+  visit: (n: AnyNode, p: AnyNode | null) => void,
+) {
   if (!node || typeof node !== "object") return;
   visit(node, parent);
   for (const key of Object.keys(node)) {
@@ -74,7 +80,12 @@ const lit = (v: string | number) => ({ type: "Literal", value: v });
 
 /** Instrument the program: wrap functions with enter/exit and prefix statements with line markers. */
 function instrument(code: string): string {
-  const ast: AnyNode = parse(code, { ecmaVersion: 2022, locations: true, sourceType: "script", allowReturnOutsideFunction: true });
+  const ast: AnyNode = parse(code, {
+    ecmaVersion: 2022,
+    locations: true,
+    sourceType: "script",
+    allowReturnOutsideFunction: true,
+  });
 
   walk(ast, null, (node, parent) => {
     // Wrap function bodies
@@ -91,7 +102,8 @@ function instrument(code: string): string {
       else if (parent?.type === "VariableDeclarator" && parent.id?.name) name = parent.id.name;
       else if (parent?.type === "Property" && parent.key?.name) name = parent.key.name;
       else if (parent?.type === "MethodDefinition" && parent.key?.name) name = parent.key.name;
-      else if (parent?.type === "AssignmentExpression" && parent.left?.type === "Identifier") name = parent.left.name;
+      else if (parent?.type === "AssignmentExpression" && parent.left?.type === "Identifier")
+        name = parent.left.name;
       if (node.type === "ArrowFunctionExpression" && name === "(anonymous)") name = "=>";
 
       const original = node.body.body;
@@ -117,9 +129,11 @@ function instrument(code: string): string {
         line &&
         stmt.type !== "FunctionDeclaration" &&
         // skip the synthetic enter/try we already inserted
-        !(stmt.type === "ExpressionStatement" &&
+        !(
+          stmt.type === "ExpressionStatement" &&
           stmt.expression?.type === "CallExpression" &&
-          stmt.expression.callee?.object?.name === "__t")
+          stmt.expression.callee?.object?.name === "__t"
+        )
       ) {
         out.push(tcall("line", [lit(line)]));
       }
@@ -138,7 +152,10 @@ function instrument(code: string): string {
           } else if (init.type === "ArrayExpression") {
             kind = "array";
             preview = `[${init.elements.length}]`;
-          } else if (init.type === "FunctionExpression" || init.type === "ArrowFunctionExpression") {
+          } else if (
+            init.type === "FunctionExpression" ||
+            init.type === "ArrowFunctionExpression"
+          ) {
             kind = "function";
             preview = "ƒ";
           } else if (init.type === "NewExpression") {
@@ -360,7 +377,9 @@ export async function traceCode(code: string): Promise<JsStep[]> {
               return fn(v);
             }
           : fn;
-      return super.then(wrap(".then", onF as never), wrap(".catch", onR as never)) as Promise<TResult1 | TResult2>;
+      return super.then(wrap(".then", onF as never), wrap(".catch", onR as never)) as Promise<
+        TResult1 | TResult2
+      >;
     }
   }
 
@@ -374,7 +393,6 @@ export async function traceCode(code: string): Promise<JsStep[]> {
   }
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval
     const fn = new Function(
       "__t",
       "console",

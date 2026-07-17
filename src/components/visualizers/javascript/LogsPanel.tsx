@@ -17,8 +17,8 @@ const KIND_TONE: Record<string, string> = {
   "dequeue-callback": "callback",
   "enqueue-microtask": "microtask",
   "dequeue-microtask": "microtask",
-  "console": "console",
-  "note": "muted",
+  console: "console",
+  note: "muted",
 };
 
 export function LogsPanel() {
@@ -27,7 +27,9 @@ export function LogsPanel() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = scrollRef.current?.querySelector("[data-radix-scroll-area-viewport]") as HTMLElement | null;
+    const el = scrollRef.current?.querySelector(
+      "[data-radix-scroll-area-viewport]",
+    ) as HTMLElement | null;
     if (el) el.scrollTop = el.scrollHeight;
   }, [logs.length]);
 
@@ -46,7 +48,9 @@ export function LogsPanel() {
       <div className="flex items-center justify-between border-b border-border bg-muted/30 px-3 py-2">
         <div className="flex items-center gap-2">
           <ScrollText className="h-3.5 w-3.5 text-muted-foreground" />
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground">Event Logs</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground">
+            Event Logs
+          </h3>
           <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
             {logs.length}
           </span>
@@ -55,10 +59,24 @@ export function LogsPanel() {
           <span className="mr-1 text-[10px] uppercase tracking-wider text-muted-foreground">
             session only
           </span>
-          <Button size="icon" variant="ghost" className="h-6 w-6" onClick={download} disabled={!logs.length} title="Download JSON">
+          <Button
+            size="icon"
+            variant="ghost"
+            className="h-6 w-6"
+            onClick={download}
+            disabled={!logs.length}
+            title="Download JSON"
+          >
             <Download className="h-3.5 w-3.5" />
           </Button>
-          <Button size="icon" variant="ghost" className="h-6 w-6" onClick={clearLogs} disabled={!logs.length} title="Clear logs">
+          <Button
+            size="icon"
+            variant="ghost"
+            className="h-6 w-6"
+            onClick={clearLogs}
+            disabled={!logs.length}
+            title="Clear logs"
+          >
             <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
@@ -92,7 +110,9 @@ export function LogsPanel() {
                       <span>{l.label}</span>
                     </div>
                     {l.explanation && (
-                      <div className="truncate text-[10px] text-muted-foreground">{l.explanation}</div>
+                      <div className="truncate text-[10px] text-muted-foreground">
+                        {l.explanation}
+                      </div>
                     )}
                   </div>
                 </motion.div>

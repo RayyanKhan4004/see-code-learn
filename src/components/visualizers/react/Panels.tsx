@@ -2,10 +2,26 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
-import { Pause, Play, RotateCcw, SkipBack, SkipForward, Layers, Trash2, ScrollText, Sparkles } from "lucide-react";
+import {
+  Pause,
+  Play,
+  RotateCcw,
+  SkipBack,
+  SkipForward,
+  Layers,
+  Trash2,
+  ScrollText,
+  Sparkles,
+} from "lucide-react";
 import { useReactPlayground } from "@/store/react-playground";
 import { reactExamples } from "@/lib/visualizer/react/examples";
 import type { ComponentNode } from "@/lib/visualizer/react/types";
@@ -14,8 +30,18 @@ import type { ComponentNode } from "@/lib/visualizer/react/types";
 
 export function ReactControls() {
   const {
-    isPlaying, play, pause, stepForward, stepBackward, reset,
-    speedMs, setSpeed, stepIndex, trace, exampleId, loadExample,
+    isPlaying,
+    play,
+    pause,
+    stepForward,
+    stepBackward,
+    reset,
+    speedMs,
+    setSpeed,
+    stepIndex,
+    trace,
+    exampleId,
+    loadExample,
   } = useReactPlayground();
 
   useEffect(() => {
@@ -31,30 +57,64 @@ export function ReactControls() {
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card px-3 py-2">
       <Select value={exampleId} onValueChange={loadExample}>
-        <SelectTrigger className="h-9 w-[220px] text-sm"><SelectValue /></SelectTrigger>
+        <SelectTrigger className="h-9 w-[220px] text-sm">
+          <SelectValue />
+        </SelectTrigger>
         <SelectContent>
           {reactExamples.map((ex) => (
-            <SelectItem key={ex.id} value={ex.id}>{ex.title}</SelectItem>
+            <SelectItem key={ex.id} value={ex.id}>
+              {ex.title}
+            </SelectItem>
           ))}
         </SelectContent>
       </Select>
 
       <div className="flex items-center gap-1">
-        <Button size="icon" variant="ghost" onClick={reset} title="Reset"><RotateCcw className="h-4 w-4" /></Button>
-        <Button size="icon" variant="ghost" onClick={stepBackward} disabled={stepIndex < 0}><SkipBack className="h-4 w-4" /></Button>
+        <Button size="icon" variant="ghost" onClick={reset} title="Reset">
+          <RotateCcw className="h-4 w-4" />
+        </Button>
+        <Button size="icon" variant="ghost" onClick={stepBackward} disabled={stepIndex < 0}>
+          <SkipBack className="h-4 w-4" />
+        </Button>
         {isPlaying ? (
-          <Button size="sm" variant="secondary" onClick={pause} className="gap-1.5"><Pause className="h-4 w-4" />Pause</Button>
+          <Button size="sm" variant="secondary" onClick={pause} className="gap-1.5">
+            <Pause className="h-4 w-4" />
+            Pause
+          </Button>
         ) : (
-          <Button size="sm" variant="secondary" onClick={() => { if (stepIndex >= trace.length - 1) reset(); play(); }} className="gap-1.5">
-            <Play className="h-4 w-4" />Play
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => {
+              if (stepIndex >= trace.length - 1) reset();
+              play();
+            }}
+            className="gap-1.5"
+          >
+            <Play className="h-4 w-4" />
+            Play
           </Button>
         )}
-        <Button size="icon" variant="ghost" onClick={stepForward} disabled={stepIndex >= trace.length - 1}><SkipForward className="h-4 w-4" /></Button>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={stepForward}
+          disabled={stepIndex >= trace.length - 1}
+        >
+          <SkipForward className="h-4 w-4" />
+        </Button>
       </div>
 
       <div className="flex flex-1 items-center gap-2 min-w-[160px]">
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Speed</span>
-        <Slider value={[1400 - speedMs]} min={100} max={1300} step={100} onValueChange={(v) => setSpeed(1400 - v[0])} className="flex-1" />
+        <Slider
+          value={[1400 - speedMs]}
+          min={100}
+          max={1300}
+          step={100}
+          onValueChange={(v) => setSpeed(1400 - v[0])}
+          className="flex-1"
+        />
       </div>
 
       <div className="font-mono text-xs text-muted-foreground tabular-nums">
@@ -80,7 +140,9 @@ export function ReactCodePanel() {
 
 /* ---------------- Component tree ---------------- */
 
-interface TreeNode extends ComponentNode { children: TreeNode[] }
+interface TreeNode extends ComponentNode {
+  children: TreeNode[];
+}
 function buildTree(nodes: ComponentNode[]): TreeNode[] {
   const map = new Map<string, TreeNode>();
   nodes.forEach((n) => map.set(n.id, { ...n, children: [] }));
@@ -110,14 +172,24 @@ export function ComponentTreePanel() {
   );
 }
 
-function TreeRow({ node, depth, highlight }: { node: TreeNode; depth: number; highlight: string | null }) {
+function TreeRow({
+  node,
+  depth,
+  highlight,
+}: {
+  node: TreeNode;
+  depth: number;
+  highlight: string | null;
+}) {
   const isHot = highlight === node.id;
   return (
     <div className="font-mono text-xs">
       <motion.div
         layout
         animate={{
-          backgroundColor: isHot ? "color-mix(in srgb, var(--primary) 22%, transparent)" : "transparent",
+          backgroundColor: isHot
+            ? "color-mix(in srgb, var(--primary) 22%, transparent)"
+            : "transparent",
           scale: isHot ? 1.01 : 1,
         }}
         transition={{ type: "spring", stiffness: 340, damping: 26 }}
@@ -127,14 +199,22 @@ function TreeRow({ node, depth, highlight }: { node: TreeNode; depth: number; hi
         <span className="text-muted-foreground">{node.children.length ? "▾" : "•"}</span>
         <span className="text-foreground">&lt;{node.name}/&gt;</span>
         {node.memo && (
-          <span className="rounded bg-[color:var(--microtask)]/15 px-1 text-[9px] uppercase text-[color:var(--microtask)]">memo</span>
+          <span className="rounded bg-[color:var(--microtask)]/15 px-1 text-[9px] uppercase text-[color:var(--microtask)]">
+            memo
+          </span>
         )}
         <span className="ml-auto flex gap-2 text-[10px] text-muted-foreground tabular-nums">
           <span title="Renders">↻ {node.renderCount}</span>
-          {node.skippedCount > 0 && <span className="text-[color:var(--callback)]" title="Skipped">⤾ {node.skippedCount}</span>}
+          {node.skippedCount > 0 && (
+            <span className="text-[color:var(--callback)]" title="Skipped">
+              ⤾ {node.skippedCount}
+            </span>
+          )}
         </span>
       </motion.div>
-      {node.children.map((c) => <TreeRow key={c.id} node={c} depth={depth + 1} highlight={highlight} />)}
+      {node.children.map((c) => (
+        <TreeRow key={c.id} node={c} depth={depth + 1} highlight={highlight} />
+      ))}
     </div>
   );
 }
@@ -173,12 +253,16 @@ export function RenderLogPanel() {
               >
                 {e.skipped ? "skip" : "render"}
               </span>
-              <span className="truncate text-foreground">&lt;{e.name}/&gt; <span className="text-muted-foreground">· {e.reason}</span></span>
+              <span className="truncate text-foreground">
+                &lt;{e.name}/&gt; <span className="text-muted-foreground">· {e.reason}</span>
+              </span>
               <span className="tabular-nums text-muted-foreground">{e.durationMs}ms</span>
             </motion.div>
           ))}
         </AnimatePresence>
-        {log.length === 0 && <div className="px-2 py-3 text-xs italic text-muted-foreground">No renders yet.</div>}
+        {log.length === 0 && (
+          <div className="px-2 py-3 text-xs italic text-muted-foreground">No renders yet.</div>
+        )}
       </ScrollArea>
     </Card>
   );
@@ -215,7 +299,12 @@ function KV({ title, data, tone }: { title: string; data: Record<string, unknown
   const entries = Object.entries(data);
   return (
     <div>
-      <div className="mb-1 text-[10px] uppercase tracking-wider" style={{ color: `var(--${tone})` }}>{title}</div>
+      <div
+        className="mb-1 text-[10px] uppercase tracking-wider"
+        style={{ color: `var(--${tone})` }}
+      >
+        {title}
+      </div>
       {entries.length === 0 ? (
         <div className="italic text-muted-foreground">∅</div>
       ) : (
@@ -237,7 +326,11 @@ function formatValue(v: unknown): string {
   if (v === undefined) return "undefined";
   if (typeof v === "string") return `"${v}"`;
   if (typeof v === "object") {
-    try { return JSON.stringify(v); } catch { return String(v); }
+    try {
+      return JSON.stringify(v);
+    } catch {
+      return String(v);
+    }
   }
   return String(v);
 }
@@ -253,10 +346,15 @@ export function ReactLearningPanel() {
         {step ? (
           <>
             <div className="text-foreground">{step.explanation}</div>
-            <div className="text-muted-foreground"><span className="font-semibold uppercase tracking-wider text-[10px]">why · </span>{step.why}</div>
+            <div className="text-muted-foreground">
+              <span className="font-semibold uppercase tracking-wider text-[10px]">why · </span>
+              {step.why}
+            </div>
           </>
         ) : (
-          <div className="italic text-muted-foreground">Press play to walk through the render cycle.</div>
+          <div className="italic text-muted-foreground">
+            Press play to walk through the render cycle.
+          </div>
         )}
       </div>
     </Card>
@@ -274,22 +372,35 @@ export function ReactLogsPanel() {
         <div className="flex items-center gap-2">
           <ScrollText className="h-3.5 w-3.5 text-muted-foreground" />
           <h3 className="text-xs font-semibold uppercase tracking-wider">Event Logs</h3>
-          <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">{logs.length}</span>
+          <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+            {logs.length}
+          </span>
         </div>
-        <Button size="icon" variant="ghost" className="h-6 w-6" onClick={clearLogs} disabled={!logs.length}>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-6 w-6"
+          onClick={clearLogs}
+          disabled={!logs.length}
+        >
           <Trash2 className="h-3.5 w-3.5" />
         </Button>
       </div>
       <ScrollArea className="flex-1">
         <div className="p-2 font-mono text-[11px]">
           {logs.map((l) => (
-            <div key={l.id} className="flex items-baseline gap-2 border-b border-border/30 px-1 py-1">
+            <div
+              key={l.id}
+              className="flex items-baseline gap-2 border-b border-border/30 px-1 py-1"
+            >
               <span className="tabular-nums text-muted-foreground">#{l.stepIndex + 1}</span>
               <span className="rounded bg-muted px-1.5 py-0.5 text-[9px] uppercase">{l.kind}</span>
               <span className="truncate text-foreground">{l.label}</span>
             </div>
           ))}
-          {logs.length === 0 && <div className="px-2 py-3 italic text-muted-foreground">No events yet.</div>}
+          {logs.length === 0 && (
+            <div className="px-2 py-3 italic text-muted-foreground">No events yet.</div>
+          )}
         </div>
       </ScrollArea>
     </Card>
@@ -305,7 +416,9 @@ function Header({ title, hint, icon }: { title: string; hint?: string; icon?: Re
         <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground">{title}</h3>
         {icon}
       </div>
-      {hint && <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{hint}</span>}
+      {hint && (
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{hint}</span>
+      )}
     </div>
   );
 }

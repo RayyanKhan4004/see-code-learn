@@ -63,7 +63,9 @@ export function AppSidebar() {
                   <SidebarMenuButton disabled className="opacity-60">
                     <m.icon className="h-4 w-4" />
                     <span>{m.title}</span>
-                    <Badge variant="secondary" className="ml-auto text-[9px] uppercase">soon</Badge>
+                    <Badge variant="secondary" className="ml-auto text-[9px] uppercase">
+                      soon
+                    </Badge>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

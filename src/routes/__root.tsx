@@ -42,7 +42,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="text-xl font-semibold">Something went wrong</h1>
         <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
         <button
-          onClick={() => { router.invalidate(); reset(); }}
+          onClick={() => {
+            router.invalidate();
+            reset();
+          }}
           className="mt-6 inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
         >
           Try again
@@ -58,7 +61,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "CodeVision — Visualize how code actually runs" },
-      { name: "description", content: "An interactive playground that shows the JavaScript call stack, heap, event loop, and queues as your code executes." },
+      {
+        name: "description",
+        content:
+          "An interactive playground that shows the JavaScript call stack, heap, event loop, and queues as your code executes.",
+      },
       { property: "og:title", content: "CodeVision" },
       { property: "og:description", content: "Watch JavaScript run — step by step." },
       { property: "og:type", content: "website" },
@@ -74,8 +81,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <head><HeadContent /></head>
-      <body>{children}<Scripts /></body>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
     </html>
   );
 }
@@ -90,7 +102,9 @@ function RootComponent() {
           <div className="flex flex-1 flex-col">
             <header className="flex h-11 items-center gap-2 border-b border-border bg-card/40 px-3">
               <SidebarTrigger />
-              <span className="text-xs text-muted-foreground">CodeVision · See your code think</span>
+              <span className="text-xs text-muted-foreground">
+                CodeVision · See your code think
+              </span>
             </header>
             <main className="flex-1 overflow-hidden">
               <Outlet />

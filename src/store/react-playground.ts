@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { applyReactStep, initialReactState, type ReactStep, type ReactVmState } from "@/lib/visualizer/react/types";
+import {
+  applyReactStep,
+  initialReactState,
+  type ReactStep,
+  type ReactVmState,
+} from "@/lib/visualizer/react/types";
 import { reactExamples } from "@/lib/visualizer/react/examples";
 
 export interface ReactLogEntry {
@@ -39,7 +44,7 @@ function computeAt(trace: ReactStep[], index: number): ReactVmState {
 
 let lid = 0;
 function makeLog(step: ReactStep, idx: number): ReactLogEntry {
-  const p: any = step.payload ?? {};
+  const p: Record<string, unknown> = step.payload ?? {};
   const label = p.name ?? p.id ?? step.kind;
   return {
     id: `rlog-${++lid}`,
@@ -79,7 +84,10 @@ export const useReactPlayground = create<ReactPlaygroundState>((set, get) => ({
   reset: () => set({ stepIndex: -1, vm: initialReactState, isPlaying: false, logs: [] }),
   stepForward: () => {
     const { trace, stepIndex, vm, logs } = get();
-    if (stepIndex >= trace.length - 1) { set({ isPlaying: false }); return; }
+    if (stepIndex >= trace.length - 1) {
+      set({ isPlaying: false });
+      return;
+    }
     const next = stepIndex + 1;
     const step = trace[next];
     set({ stepIndex: next, vm: applyReactStep(vm, step), logs: [...logs, makeLog(step, next)] });

@@ -187,7 +187,9 @@ export function LiveReactPlayground() {
           <ScrollArea className="flex-1">
             <div className="p-3">
               {error ? (
-                <pre className="whitespace-pre-wrap font-mono text-xs text-destructive">{error}</pre>
+                <pre className="whitespace-pre-wrap font-mono text-xs text-destructive">
+                  {error}
+                </pre>
               ) : Root ? (
                 <ErrorBoundary key={runKey} onError={setError}>
                   <Profiler id="user-root" onRender={onCommit}>
@@ -211,8 +213,15 @@ export function LiveReactPlayground() {
               <h3 className="text-xs font-semibold uppercase tracking-wider">Render Commits</h3>
             </div>
             <div className="flex items-center gap-2">
-              <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]">{totalRenders}</span>
-              <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => setCommits([])}>
+              <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]">
+                {totalRenders}
+              </span>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-6 w-6"
+                onClick={() => setCommits([])}
+              >
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
             </div>
@@ -244,7 +253,9 @@ export function LiveReactPlayground() {
                     <span className="text-muted-foreground">
                       actual {c.actualDuration.toFixed(2)}ms · base {c.baseDuration.toFixed(2)}ms
                     </span>
-                    <span className="tabular-nums text-muted-foreground">+{c.time.toFixed(0)}ms</span>
+                    <span className="tabular-nums text-muted-foreground">
+                      +{c.time.toFixed(0)}ms
+                    </span>
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -333,7 +344,6 @@ function fmt(v: unknown): string {
 }
 
 /* ---- tiny error boundary so user code doesn't nuke the panel ---- */
-
 
 class ErrorBoundary extends Component<
   { children: ReactNode; onError: (msg: string) => void },

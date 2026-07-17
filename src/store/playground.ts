@@ -1,10 +1,5 @@
 import { create } from "zustand";
-import {
-  applyJsStep,
-  initialJsState,
-  type JsStep,
-  type JsVmState,
-} from "@/lib/visualizer/types";
+import { applyJsStep, initialJsState, type JsStep, type JsVmState } from "@/lib/visualizer/types";
 import { javascriptModule } from "@/lib/visualizer/javascript/examples";
 import { traceCode } from "@/lib/visualizer/javascript/tracer";
 
@@ -54,7 +49,7 @@ function computeStateAt(trace: JsStep[], index: number): JsVmState {
 
 let logUid = 0;
 function makeLog(step: JsStep, stepIndex: number): LogEntry {
-  const payload: any = step.payload ?? {};
+  const payload: Record<string, unknown> = step.payload ?? {};
   const label =
     payload.label ??
     payload.name ??

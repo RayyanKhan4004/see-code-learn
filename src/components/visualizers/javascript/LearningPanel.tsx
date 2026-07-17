@@ -32,7 +32,10 @@ export function LearningPanel() {
               transition={{ duration: 0.18 }}
               className="space-y-2"
             >
-              <Badge variant="outline" className="border-[color:var(--primary)]/40 text-[color:var(--primary)]">
+              <Badge
+                variant="outline"
+                className="border-[color:var(--primary)]/40 text-[color:var(--primary)]"
+              >
                 {step.concept}
               </Badge>
               <p className="text-sm font-medium text-foreground">{step.explanation}</p>
@@ -50,7 +53,8 @@ export function LearningPanel() {
               animate={{ opacity: 1 }}
               className="text-sm text-muted-foreground"
             >
-              Press <span className="font-mono text-foreground">Run</span> to watch the JavaScript engine execute your code step by step.
+              Press <span className="font-mono text-foreground">Run</span> to watch the JavaScript
+              engine execute your code step by step.
             </motion.p>
           )}
         </AnimatePresence>

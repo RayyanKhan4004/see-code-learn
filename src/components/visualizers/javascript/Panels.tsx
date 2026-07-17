@@ -8,7 +8,12 @@ export function CallStackPanel() {
   const stack = usePlayground((s) => s.vm.callStack);
   return (
     <Card className="flex h-full flex-col overflow-hidden border-border bg-card">
-      <PanelHeader title="Call Stack" hint="LIFO" tone="stack" icon={<Layers className="h-3.5 w-3.5" />} />
+      <PanelHeader
+        title="Call Stack"
+        hint="LIFO"
+        tone="stack"
+        icon={<Layers className="h-3.5 w-3.5" />}
+      />
       <ScrollArea className="flex-1 p-3">
         <div className="flex flex-col-reverse gap-1.5">
           <AnimatePresence initial={false}>
@@ -24,7 +29,9 @@ export function CallStackPanel() {
               >
                 <span className="text-[color:var(--stack)]">▸</span> {frame.name}
                 {idx === stack.length - 1 && (
-                  <span className="ml-2 text-[10px] uppercase tracking-wider text-muted-foreground">top</span>
+                  <span className="ml-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+                    top
+                  </span>
                 )}
               </motion.div>
             ))}
@@ -54,10 +61,14 @@ export function HeapPanel() {
                 transition={{ type: "spring", stiffness: 360, damping: 24 }}
                 className="rounded-md border border-[color:var(--heap)]/40 bg-[color:var(--heap)]/10 p-2 font-mono text-xs"
               >
-                <div className="text-[10px] uppercase tracking-wider text-[color:var(--heap)]">{obj.kind}</div>
+                <div className="text-[10px] uppercase tracking-wider text-[color:var(--heap)]">
+                  {obj.kind}
+                </div>
                 <div className="text-foreground">{obj.label}</div>
                 {obj.preview && (
-                  <div className="mt-1 truncate text-[10px] text-muted-foreground">{obj.preview}</div>
+                  <div className="mt-1 truncate text-[10px] text-muted-foreground">
+                    {obj.preview}
+                  </div>
                 )}
               </motion.div>
             ))}
@@ -199,7 +210,9 @@ function PanelHeader({
           className="inline-block h-2 w-2 rounded-full shrink-0"
           style={{ backgroundColor: `var(--${tone})` }}
         />
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground truncate">{title}</h3>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground truncate">
+          {title}
+        </h3>
         {icon}
       </div>
       {hint && (

@@ -60,7 +60,9 @@ export function CodeEditor() {
         .cv-active-glyph { background: rgb(56, 189, 248); width: 3px !important; margin-left: 4px; }
       `}</style>
       {mounted ? (
-        <Suspense fallback={<div className="p-4 text-xs text-muted-foreground">Loading editor…</div>}>
+        <Suspense
+          fallback={<div className="p-4 text-xs text-muted-foreground">Loading editor…</div>}
+        >
           <Editor
             height="100%"
             defaultLanguage="javascript"

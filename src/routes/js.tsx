@@ -16,7 +16,11 @@ export const Route = createFileRoute("/js")({
   head: () => ({
     meta: [
       { title: "JavaScript Visualizer · CodeVision" },
-      { name: "description", content: "Live JavaScript playground that visualizes the call stack, heap, event loop, microtask and callback queues." },
+      {
+        name: "description",
+        content:
+          "Live JavaScript playground that visualizes the call stack, heap, event loop, microtask and callback queues.",
+      },
     ],
   }),
   component: JsPlayground,
